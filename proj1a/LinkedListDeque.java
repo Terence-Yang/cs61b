@@ -130,30 +130,4 @@ public class LinkedListDeque<T> {
             return getRecursiveHelper(curr, index - 1);
         }
     }
-
-    public static void main(String[] args) {
-        LinkedListDeque<Integer> deck = new LinkedListDeque<>();
-        deck.addLast(0);
-        deck.removeFirst();
-        deck.addLast(2);
-        deck.addLast(3);
-        deck.addLast(4);
-        deck.addLast(5);
-        deck.addLast(6);
-        deck.addLast(7);
-        deck.addLast(8);
-        deck.addLast(9);
-        deck.addLast(10);
-        System.out.println(deck.removeFirst());
-//        deck.addLast(0);
-//        deck.addLast(1);
-//        deck.addLast(2);
-//        deck.printDeque();
-//        System.out.println(deck.get(0));
-//        System.out.println(deck.getRecursive(2));
-//        System.out.println(deck.getRecursive(0));
-//        System.out.println(deck.size());
-//        LinkedListDeque<Integer> deckClone = new LinkedListDeque<>(deck);
-//        deckClone.printDeque();
-    }
 }

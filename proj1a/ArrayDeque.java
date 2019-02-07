@@ -151,18 +151,4 @@ public class ArrayDeque<T> {
         index = (plusOne(nextFirst) + index) % items.length;
         return items[index];
     }
-
-    public static void main(String[] args) {
-        ArrayDeque<Integer> deck = new ArrayDeque<>();
-        deck.addLast(0);
-        deck.addLast(1);
-        deck.addLast(2);
-        deck.addFirst(3);
-        deck.printDeque();
-        System.out.println(deck.get(0));
-        System.out.println(deck.get(3));
-        System.out.println(deck.size());
-        ArrayDeque<Integer> deckClone = new ArrayDeque<>(deck);
-        deckClone.printDeque();
-    }
 }
