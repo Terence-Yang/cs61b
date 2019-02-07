@@ -1,13 +1,13 @@
-public class LinkedListDeque<Item> {
+public class LinkedListDeque<T> {
     private Node sentinel;
     private int size;
 
     private class Node {
         Node prev;
-        Item item;
+        T item;
         Node next;
 
-        Node(Node p, Item i, Node n) {
+        Node(Node p, T i, Node n) {
             prev = p;
             item = i;
             next = n;
@@ -29,12 +29,12 @@ public class LinkedListDeque<Item> {
         sentinel.next = sentinel;
         size = 0;
         for (int i = 0; i < other.size(); i++) {
-            addLast((Item) other.get(i));
+            addLast((T) other.get(i));
         }
     }
 
     /** Adds an item of type T to the front of the deque. */
-    public void addFirst(Item item) {
+    public void addFirst(T item) {
         Node node = new Node(sentinel, item, sentinel.next);
         sentinel.next.prev = node;
         sentinel.next = node;
@@ -42,7 +42,7 @@ public class LinkedListDeque<Item> {
     }
 
     /** Adds an item of type T to the back of the deque. */
-    public void addLast(Item item) {
+    public void addLast(T item) {
         Node node = new Node(sentinel.prev, item, sentinel);
         sentinel.prev.next = node;
         sentinel.prev = node;
@@ -76,12 +76,13 @@ public class LinkedListDeque<Item> {
     /** Removes and returns the item at the front of the deque.
      *  If no such item exists, returns null.
      */
-    public Item removeFirst() {
+    public T removeFirst() {
         if (isEmpty()) {
             return null;
         }
-        Item first = sentinel.next.item;
+        T first = sentinel.next.item;
         sentinel.next = sentinel.next.next;
+        sentinel.next.prev = sentinel;
         size -= 1;
         return first;
     }
@@ -89,12 +90,13 @@ public class LinkedListDeque<Item> {
     /** Removes and returns the item at the back of the deque.
      *  If no such item exists, returns null.
      */
-    public Item removeLast() {
+    public T removeLast() {
         if (isEmpty()) {
             return null;
         }
-        Item last = sentinel.prev.item;
+        T last = sentinel.prev.item;
         sentinel.prev = sentinel.prev.prev;
+        sentinel.prev.next = sentinel;
         size -= 1;
         return last;
     }
@@ -103,7 +105,7 @@ public class LinkedListDeque<Item> {
      *  If no such item exists, returns null.
      *  Must not alter the deque and must use iteration.
      */
-    public Item get(int index) {
+    public T get(int index) {
         if (index > size) {
             return null;
         }
@@ -116,11 +118,11 @@ public class LinkedListDeque<Item> {
     }
 
     /** Same as get, but uses recursion. */
-    public Item getRecursive(int index) {
+    public T getRecursive(int index) {
         return getRecursiveHelper(sentinel.next, index);
     }
 
-    private Item getRecursiveHelper(Node curr, int index) {
+    private T getRecursiveHelper(Node curr, int index) {
         if (index == 0) {
             return curr.item;
         } else {
@@ -132,14 +134,26 @@ public class LinkedListDeque<Item> {
     public static void main(String[] args) {
         LinkedListDeque<Integer> deck = new LinkedListDeque<>();
         deck.addLast(0);
-        deck.addLast(1);
+        deck.removeFirst();
         deck.addLast(2);
-        deck.printDeque();
-        System.out.println(deck.get(0));
-        System.out.println(deck.getRecursive(2));
-        System.out.println(deck.getRecursive(0));
+        deck.addLast(3);
+        deck.addLast(4);
+        deck.addLast(5);
+        deck.addLast(6);
+        deck.addLast(7);
+        deck.addLast(8);
+        deck.addLast(9);
+        deck.addLast(10);
+        System.out.println(deck.removeFirst());
+//        deck.addLast(0);
+//        deck.addLast(1);
+//        deck.addLast(2);
+//        deck.printDeque();
+//        System.out.println(deck.get(0));
+//        System.out.println(deck.getRecursive(2));
+//        System.out.println(deck.getRecursive(0));
 //        System.out.println(deck.size());
-//        LinkedListDeque<Integer> deck_clone = new LinkedListDeque<>(deck);
-//        deck_clone.printDeque();
+//        LinkedListDeque<Integer> deckClone = new LinkedListDeque<>(deck);
+//        deckClone.printDeque();
     }
 }

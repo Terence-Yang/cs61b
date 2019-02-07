@@ -1,5 +1,5 @@
-public class ArrayDeque<Item> {
-    private Item[] items;
+public class ArrayDeque<T> {
+    private T[] items;
     private int size;
     private int nextFirst;
     private int nextLast;
@@ -11,7 +11,7 @@ public class ArrayDeque<Item> {
      *  The starting size of your array should be 8.
      */
     public ArrayDeque() {
-        items = (Item[]) new Object[INIT_CAPACITY];
+        items = (T[]) new Object[INIT_CAPACITY];
         size = 0;
         nextFirst = 4;
         nextLast = 5;
@@ -19,12 +19,12 @@ public class ArrayDeque<Item> {
 
     /** Creates a deep copy of other. */
     public ArrayDeque(ArrayDeque other) {
-        items = (Item[]) new Object[INIT_CAPACITY];
+        items = (T[]) new Object[INIT_CAPACITY];
         size = 0;
         nextFirst = 4;
         nextLast = 5;
         for (int i = 0; i < other.size(); i++) {
-            addLast((Item) other.get(i));
+            addLast((T) other.get(i));
         }
     }
 
@@ -37,7 +37,7 @@ public class ArrayDeque<Item> {
     }
 
     private void resize(int capacity) {
-        Item[] newArray = (Item[]) new Object[capacity];
+        T[] newArray = (T[]) new Object[capacity];
 
         int curr = plusOne(nextFirst);
         for (int i = 0; i < size; i++) {
@@ -51,7 +51,7 @@ public class ArrayDeque<Item> {
     }
 
     /** Adds an item of type T to the front of the deque. */
-    public void addFirst(Item item) {
+    public void addFirst(T item) {
         if (size == items.length) {
             resize(size * RFACTOR);
         }
@@ -62,7 +62,7 @@ public class ArrayDeque<Item> {
     }
 
     /** Adds an item of type T to the back of the deque. */
-    public void addLast(Item item) {
+    public void addLast(T item) {
         if (size == items.length) {
             resize(size * RFACTOR);
         }
@@ -100,13 +100,13 @@ public class ArrayDeque<Item> {
     /** Removes and returns the item at the front of the deque.
      *  If no such item exists, returns null.
      */
-    public Item removeFirst() {
+    public T removeFirst() {
         if (size == 0) {
             return null;
         }
 
         int first = plusOne(nextFirst);
-        Item firstItem = items[first];
+        T firstItem = items[first];
         items[first] = null;
         nextFirst = first;
         size -= 1;
@@ -121,13 +121,13 @@ public class ArrayDeque<Item> {
     /** Removes and returns the item at the back of the deque.
      *  If no such item exists, returns null.
      */
-    public Item removeLast() {
+    public T removeLast() {
         if (size == 0) {
             return null;
         }
 
         int last = minusOne(nextLast);
-        Item lastItem = items[last];
+        T lastItem = items[last];
         items[last] = null;
         nextLast = last;
         size -= 1;
@@ -143,7 +143,7 @@ public class ArrayDeque<Item> {
      *  If no such item exists, returns null.
      *  Must not alter the deque and must take constant time.
      */
-    public Item get(int index) {
+    public T get(int index) {
         if (index > size) {
             return null;
         }
@@ -162,7 +162,7 @@ public class ArrayDeque<Item> {
         System.out.println(deck.get(0));
         System.out.println(deck.get(3));
         System.out.println(deck.size());
-        ArrayDeque<Integer> deck_clone = new ArrayDeque<>(deck);
-        deck_clone.printDeque();
+        ArrayDeque<Integer> deckClone = new ArrayDeque<>(deck);
+        deckClone.printDeque();
     }
 }
