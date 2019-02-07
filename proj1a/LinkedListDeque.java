@@ -27,10 +27,10 @@ public class LinkedListDeque<Item> {
         sentinel = new Node(null, null, null);
         sentinel.prev = sentinel;
         sentinel.next = sentinel;
+        size = 0;
         for (int i = 0; i < other.size(); i++) {
             addLast((Item) other.get(i));
         }
-        size = other.size();
     }
 
     /** Adds an item of type T to the front of the deque. */
@@ -65,10 +65,10 @@ public class LinkedListDeque<Item> {
      *  Once all the items have been printed, print out a new line.
      */
     public void printDeque() {
-        Node ptr = sentinel.next;
-        while (ptr != sentinel) {
-            System.out.print(ptr.item + " ");
-            ptr = ptr.next;
+        Node curr = sentinel.next;
+        while (curr != sentinel) {
+            System.out.print(curr.item + " ");
+            curr = curr.next;
         }
         System.out.println();
     }
@@ -107,21 +107,17 @@ public class LinkedListDeque<Item> {
         if (index > size) {
             return null;
         }
-        Node ptr = sentinel.next;
+        Node curr = sentinel.next;
         while (index > 0) {
-            ptr = ptr.next;
+            curr = curr.next;
             index -= 1;
         }
-        return ptr.item;
+        return curr.item;
     }
 
     /** Same as get, but uses recursion. */
     public Item getRecursive(int index) {
-        if (index == 0) {
-            return sentinel.next.item;
-        } else {
-            return getRecursiveHelper(sentinel.next, index);
-        }
+        return getRecursiveHelper(sentinel.next, index);
     }
 
     private Item getRecursiveHelper(Node curr, int index) {
@@ -139,10 +135,11 @@ public class LinkedListDeque<Item> {
         deck.addLast(1);
         deck.addLast(2);
         deck.printDeque();
-//        System.out.println(deck.get(0));
-//        System.out.println(deck.getRecursive(2));
+        System.out.println(deck.get(0));
+        System.out.println(deck.getRecursive(2));
+        System.out.println(deck.getRecursive(0));
 //        System.out.println(deck.size());
-        LinkedListDeque<Integer> deck_clone = new LinkedListDeque<>(deck);
-        deck_clone.printDeque();
+//        LinkedListDeque<Integer> deck_clone = new LinkedListDeque<>(deck);
+//        deck_clone.printDeque();
     }
 }
