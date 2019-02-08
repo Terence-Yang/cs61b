@@ -11,11 +11,11 @@ public class IntList {
     /**
      * First element of list.
      */
-    public int first;
+    private int first;
     /**
      * Remaining elements of list.
      */
-    public IntList rest;
+    private IntList rest;
 
     /**
      * A List with first FIRST0 and rest REST0.
@@ -100,7 +100,23 @@ public class IntList {
         }
     }
 
-
+    /**
+     * Returns the reverse of the given IntList.
+     * This method is destructive. If given null
+     * as an input, returns null.
+     */
+    public static IntList reverse(IntList A) {
+        if (A == null) {
+            return null;
+        }
+        IntList R, temp;
+        for (R = null; A != null; A = temp) {
+            temp = A.rest;
+            A.rest = R;
+            R = A;
+        }
+        return R;
+    }
 
 
 
