@@ -6,9 +6,13 @@ public class TestOffByN {
     CharacterComparator offBy5 = new OffByN(5);
 
     @Test
-    public void TestOffByN() {
+    public void testOffBy3() {
         assertTrue(offBy3.equalChars('a', 'd'));
         assertFalse(offBy3.equalChars('a', 'c'));
+    }
+
+    @Test
+    public void testOffBy5() {
         assertTrue(offBy5.equalChars('f', 'a'));
         assertFalse(offBy5.equalChars('z', 'x'));
     }
