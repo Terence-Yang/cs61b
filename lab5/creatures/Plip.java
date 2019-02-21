@@ -99,7 +99,9 @@ public class Plip extends Creature {
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        energy = energy * 0.5;
+        double babyEnergy = energy;
+        return new Plip(babyEnergy);
     }
 
     /**
@@ -119,16 +121,22 @@ public class Plip extends Creature {
         // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
-        // TODO
-        // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
 
-        if (false) { // FIXME
-            // TODO
+        for (Direction d: neighbors.keySet()) {
+            if (neighbors.get(d).name().equals("empty")) {
+                emptyNeighbors.addLast(d);
+            }
+        }
+
+        if (emptyNeighbors.size() == 0) {
+            return new Action(Action.ActionType.STAY);
         }
 
         // Rule 2
-        // HINT: randomEntry(emptyNeighbors)
+        else if (energy >= 1) {
+            Direction d = huglife.HugLifeUtils.randomEntry(emptyNeighbors);
+            return new Action(Action.ActionType.REPLICATE, d);
+        }
 
         // Rule 3
 
