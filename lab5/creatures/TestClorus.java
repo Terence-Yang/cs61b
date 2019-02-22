@@ -23,7 +23,7 @@ public class TestClorus {
         c.move();
         assertEquals(0.97, c.energy(), 0.01);
         c.stay();
-        assertEquals(0.98, c.energy(), 0.01);
+        assertEquals(0.96, c.energy(), 0.01);
     }
 
     @Test

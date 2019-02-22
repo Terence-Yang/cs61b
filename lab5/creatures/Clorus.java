@@ -57,7 +57,7 @@ public class Clorus extends Creature {
 
     @Override
     public void stay() {
-        energy += 0.01;
+        energy -= 0.01;
     }
 
     @Override
