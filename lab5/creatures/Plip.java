@@ -4,6 +4,8 @@ import huglife.Creature;
 import huglife.Direction;
 import huglife.Action;
 import huglife.Occupant;
+import static huglife.HugLifeUtils.randomEntry;
+import static huglife.HugLifeUtils.random;
 
 import java.awt.Color;
 import java.util.ArrayDeque;
@@ -118,27 +120,31 @@ public class Plip extends Creature {
      * for an example to follow.
      */
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
-        // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
 
         for (Direction d: neighbors.keySet()) {
             if (neighbors.get(d).name().equals("empty")) {
                 emptyNeighbors.addLast(d);
+            } else if (neighbors.get(d).name().equals("clorus")) {
+                anyClorus = true;
             }
         }
 
+        // Rule 1
         if (emptyNeighbors.size() == 0) {
             return new Action(Action.ActionType.STAY);
         }
 
         // Rule 2
         else if (energy >= 1) {
-            Direction d = huglife.HugLifeUtils.randomEntry(emptyNeighbors);
-            return new Action(Action.ActionType.REPLICATE, d);
+            return new Action(Action.ActionType.REPLICATE, randomEntry(emptyNeighbors));
         }
 
         // Rule 3
+        else if (anyClorus && random() > 0.5) {
+            return new Action(Action.ActionType.MOVE, randomEntry(emptyNeighbors));
+        }
 
         // Rule 4
         return new Action(Action.ActionType.STAY);
