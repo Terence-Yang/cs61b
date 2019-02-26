@@ -72,5 +72,33 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
 
     // TODO: When you get to part 4, implement the needed code to support
     //       iteration and equals.
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayRingBufferIterator();
+    }
+
+    private class ArrayRingBufferIterator implements Iterator<T> {
+        private int count;
+        private int pos;
+
+        public ArrayRingBufferIterator() {
+            count = 0;
+            pos = first;
+        }
+
+        public boolean hasNext() {
+            return count < fillCount();
+        }
+
+        public T next() {
+            T item = rb[pos];
+            pos += 1;
+            if (pos == capacity()) {
+                pos = 0;
+            }
+            count += 1;
+            return item;
+        }
+    }
 }
     // TODO: Remove all comments that say TODO when you're done.
