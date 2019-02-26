@@ -27,6 +27,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      */
     @Override
     public void enqueue(T x) {
+        if (isFull()) {
+            throw new RuntimeException("Ring Buffer overflow");
+        }
         rb[last] = x;
         fillCount += 1;
         last += 1;
@@ -41,6 +44,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      */
     @Override
     public T dequeue() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring Buffer underflow");
+        }
         T returnValue = rb[first];
         rb[first] = null;
         fillCount -= 1;
@@ -57,6 +63,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      */
     @Override
     public T peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring Buffer underflow");
+        }
         return rb[first];
     }
 
@@ -101,4 +110,3 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         }
     }
 }
-    // TODO: Remove all comments that say TODO when you're done.
