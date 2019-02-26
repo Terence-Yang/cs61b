@@ -88,7 +88,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         private int count;
         private int pos;
 
-        public ArrayRingBufferIterator() {
+        ArrayRingBufferIterator() {
             count = 0;
             pos = first;
         }
