@@ -79,8 +79,6 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         return fillCount;
     }
 
-    // TODO: When you get to part 4, implement the needed code to support
-    //       iteration and equals.
     @Override
     public Iterator<T> iterator() {
         return new ArrayRingBufferIterator();
@@ -108,5 +106,30 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
             count += 1;
             return item;
         }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        ArrayRingBuffer<T> o = (ArrayRingBuffer<T>) other;
+        if (o.fillCount() != this.fillCount()) {
+            return false;
+        }
+        Iterator<T> thisIter = this.iterator();
+        Iterator<T> otherIter = o.iterator();
+        while (thisIter.hasNext() && otherIter.hasNext()) {
+            if (thisIter.next() != otherIter.next()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
