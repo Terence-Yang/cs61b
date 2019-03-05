@@ -81,4 +81,8 @@ public class Percolation {
     private int xyTo1D(int r, int c) {
         return r * size + c + 1;
     }
+
+    public static void main(String[] args) {
+
+    }
 }
