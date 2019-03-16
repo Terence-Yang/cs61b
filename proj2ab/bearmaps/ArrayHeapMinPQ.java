@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     private ArrayList<Node> heap;
-    private HashMap<T, Double> items;
+    private HashMap<T, Integer> items;
 
     private class Node {
         T item;
@@ -39,6 +39,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         Node tmp = heap.get(i);
         heap.set(i, heap.get(j));
         heap.set(j, tmp);
+        items.put(heap.get(i).item, i);
+        items.put(heap.get(j).item, j);
     }
 
     private boolean less(int i, int j) {
@@ -78,8 +80,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             throw new IllegalArgumentException();
         }
         heap.add(new Node(item, priority));
-        swim(heap.size() - 1);
-        items.put(item, priority);
+        items.put(item, size() - 1);
+        swim(size() - 1);
     }
 
     /* Returns true if the PQ contains the given item. */
@@ -118,17 +120,13 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (!contains(item)) {
             throw new NoSuchElementException();
         }
-        for (int i = 0; i < size(); i++) {
-            if (heap.get(i).item.equals(item)) {
-                double oldPriority = heap.get(i).priority;
-                heap.get(i).priority = priority;
-                if (oldPriority < priority) {
-                    sink(i);
-                } else {
-                    swim(i);
-                }
-                return;
-            }
+        int i = items.get(item);
+        double oldPriority = heap.get(i).priority;
+        heap.get(i).priority = priority;
+        if (oldPriority < priority) {
+            sink(i);
+        } else {
+            swim(i);
         }
     }
 
