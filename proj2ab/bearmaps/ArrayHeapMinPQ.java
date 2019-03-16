@@ -21,6 +21,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     public ArrayHeapMinPQ() {
         heap = new ArrayList<>();
+        items = new HashMap<>();
     }
 
     private static int parent(int i) {
