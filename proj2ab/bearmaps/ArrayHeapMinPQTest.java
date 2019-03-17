@@ -1,6 +1,9 @@
 package bearmaps;
 
 import org.junit.Test;
+
+import java.util.NoSuchElementException;
+
 import static org.junit.Assert.assertEquals;
 
 public class ArrayHeapMinPQTest {
@@ -43,5 +46,22 @@ public class ArrayHeapMinPQTest {
         pq.changePriority("A", 5);
         pq.changePriority("C", 1);
         assertEquals("C", pq.getSmallest());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testNoSuchElement() {
+        ArrayHeapMinPQ<String> pq = new ArrayHeapMinPQ<>();
+        pq.add("A", 1);
+        pq.add("C", 3);
+        pq.add("B", 2);
+        pq.changePriority("D", 7);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgument() {
+        ArrayHeapMinPQ<String> pq = new ArrayHeapMinPQ<>();
+        pq.add("A", 1);
+        pq.add("C", 3);
+        pq.add("A", 2);
     }
 }
