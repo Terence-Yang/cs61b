@@ -36,7 +36,7 @@ public class KDTree implements PointSet {
         int cmp = comparePoints(p, n.p, orientation);
         if (cmp < 0) {
             n.leftBottom = add(p, n.leftBottom, !orientation);
-        } else if (cmp >= 0) {
+        } else {
             n.rightTop = add(p, n.rightTop, !orientation);
         }
         return n;
@@ -62,8 +62,14 @@ public class KDTree implements PointSet {
         if (Point.distance(n.p, target) < Point.distance(best, target)) {
             best = n.p;
         }
-        best = nearest(n.leftBottom, target, best);
-        best = nearest(n.rightTop, target, best);
+        if (n.orientation == HORIZONTAL && n.p.getY() > target.getY() ||
+            n.orientation == VERTICAL && n.p.getX() > target.getX()) {
+            best = nearest(n.leftBottom, target, best);
+            best = nearest(n.rightTop, target, best);
+        } else {
+            best = nearest(n.rightTop, target, best);
+            best = nearest(n.leftBottom, target, best);
+        }
         return best;
     }
 
