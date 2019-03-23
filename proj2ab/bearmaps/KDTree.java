@@ -62,15 +62,31 @@ public class KDTree implements PointSet {
         if (Point.distance(n.p, target) < Point.distance(best, target)) {
             best = n.p;
         }
-        if (n.orientation == HORIZONTAL && n.p.getY() > target.getY() ||
-            n.orientation == VERTICAL && n.p.getX() > target.getX()) {
-            best = nearest(n.leftBottom, target, best);
-            best = nearest(n.rightTop, target, best);
+        int cmp = comparePoints(target, n.p, n.orientation);
+        Node goodSide, badSide;
+        if (cmp < 0) {
+            goodSide = n.leftBottom;
+            badSide = n.rightTop;
         } else {
-            best = nearest(n.rightTop, target, best);
-            best = nearest(n.leftBottom, target, best);
+            goodSide = n.rightTop;
+            badSide = n.leftBottom;
+        }
+        best = nearest(goodSide, target, best);
+        if (isWorthLooking(n, target, best)) {
+            best = nearest(badSide, target, best);
         }
         return best;
+    }
+
+    private boolean isWorthLooking(Node n, Point target, Point best) {
+        double distToBest = Point.distance(best, target);
+        double distToBad;
+        if (n.orientation == HORIZONTAL) {
+            distToBad = Point.distance(new Point(target.getX(), n.p.getY()), target);
+        } else {
+            distToBad = Point.distance(new Point(n.p.getX(), target.getY()), target);
+        }
+        return distToBad < distToBest;
     }
 
     public static void main(String[] args) {

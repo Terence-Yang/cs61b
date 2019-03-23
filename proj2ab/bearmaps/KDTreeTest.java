@@ -20,16 +20,7 @@ public class KDTreeTest {
         Point p5 = new Point(3, 3);
         Point p6 = new Point(1, 5);
         Point p7 = new Point(4, 4);
-
-        KDTree kd = new KDTree(List.of(p1, p2, p3, p4, p5, p6, p7));
-        return kd;
-    }
-
-    private static void buildTreesWithDoubles() {
-        Point p1 = new Point(2, 3); // constructs a Point with x = 1.1, y = 2.2
-        Point p2 = new Point(2, 3);
-
-        KDTree kd = new KDTree(List.of(p1, p2));
+        return new KDTree(List.of(p1, p2, p3, p4, p5, p6, p7));
     }
 
     @Test
@@ -67,19 +58,6 @@ public class KDTreeTest {
         }
     }
 
-    private void timeWithNPointsAndQQueries(int pointCount, int queryCount) {
-        List<Point> points = randomPoints(pointCount);
-        KDTree kd = new KDTree(points);
-
-        Stopwatch sw = new Stopwatch();
-        List<Point> queries = randomPoints(queryCount);
-        for (Point p : queries) {
-            Point actual = kd.nearest(p.getX(), p.getY());
-        }
-        System.out.println("Time elapsed for " + queryCount + " queries on " +
-                pointCount + " points: " + sw.elapsedTime());
-    }
-
     @Test
     public void testWith1000PointsAnd200Queries() {
         int pointCount = 1000;
@@ -92,19 +70,6 @@ public class KDTreeTest {
         int pointCount = 10000;
         int queryCount = 2000;
         testWithNPointsAndQQueries(pointCount, queryCount);
-    }
-
-    @Test
-    public void timeWith10000PointsAnd2000Queries() {
-        timeWithNPointsAndQQueries(10000, 2000);
-    }
-
-    @Test
-    public void timeWithVariousNumbersOfPoints() {
-        List<Integer> pointCounts = List.of(1000, 10000, 100000);
-        for (int N : pointCounts) {
-            timeWithNPointsAndQQueries(N, 10000);
-        }
     }
 
     @Test
