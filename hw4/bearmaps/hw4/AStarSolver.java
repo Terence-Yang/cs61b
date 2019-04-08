@@ -25,10 +25,9 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         distTo.put(start, 0.0);
         pq.add(start, distTo.get(start) + G.estimatedDistanceToGoal(start, goal));
 
-        while (pq.size() > 0 && pq.getSmallest().equals(goal) && sw.elapsedTime() < timeout) {
+        while (pq.size() > 0 && !pq.getSmallest().equals(goal) && sw.elapsedTime() < timeout) {
             Vertex p = pq.removeSmallest();
             solution.add(p);
-            solutionWeight += distTo.get(p);
             statesExplored += 1;
             for (WeightedEdge<Vertex> e : G.neighbors(p)) {
                 Vertex q = e.to();
@@ -46,10 +45,10 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
 
         if (pq.size() == 0) {
             outcome = SolverOutcome.UNSOLVABLE;
-        } else if (pq.getSmallest() == goal) {
+        } else if (pq.getSmallest().equals(goal)) {
             outcome = SolverOutcome.SOLVED;
             solution.add(pq.getSmallest());
-            solutionWeight += distTo.get(pq.getSmallest());
+            solutionWeight = distTo.get(pq.getSmallest());
         } else {
             outcome = SolverOutcome.TIMEOUT;
         }
