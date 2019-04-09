@@ -4,7 +4,10 @@ import bearmaps.proj2ab.DoubleMapPQ;
 import bearmaps.proj2ab.ExtrinsicMinPQ;
 import edu.princeton.cs.algs4.Stopwatch;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private SolverOutcome outcome;
