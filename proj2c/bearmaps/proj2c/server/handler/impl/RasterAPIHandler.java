@@ -23,7 +23,7 @@ import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
 /**
  * Handles requests from the web browser for map images. These images
  * will be rastered into one large image to be displayed to the user.
- * @author rahul, Josh Hug, _________
+ * @author rahul, Josh Hug, Yang Zou
  */
 public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<String, Object>> {
 
@@ -84,12 +84,69 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      */
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        System.out.println(requestParams);
+//        System.out.println("yo, wanna know the parameters given by the web browser? They are:");
+//        System.out.println(requestParams);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+//        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
+//                + "your browser.");
+        double lrlon = requestParams.get("lrlon");
+        double ullon = requestParams.get("ullon");
+        double width = requestParams.get("w");
+        double ullat = requestParams.get("ullat");
+        double lrlat = requestParams.get("lrlat");
+
+        if (Constants.ROOT_LRLON < ullon || Constants.ROOT_LRLAT > ullat
+                || Constants.ROOT_ULLON > lrlon || Constants.ROOT_ULLAT < lrlat
+                || lrlon < ullon || ullat < lrlat) {
+            results.put("query_success", false);
+            return results;
+        }
+
+        int depth = getImageDepth(ullon, lrlon, width);
+
+        double lonDistPerTile = (Constants.ROOT_LRLON - Constants.ROOT_ULLON) / Math.pow(2, depth);
+        double latDistPerTile = (Constants.ROOT_ULLAT - Constants.ROOT_LRLAT) / Math.pow(2, depth);
+        int ulX = (int) Math.abs((ullon - Constants.ROOT_ULLON) / lonDistPerTile);
+        int ulY = (int) Math.abs((ullat - Constants.ROOT_ULLAT) / latDistPerTile);
+        int lrX = (int) Math.abs((lrlon - Constants.ROOT_ULLON) / lonDistPerTile);
+        int lrY = (int) Math.abs((lrlat - Constants.ROOT_ULLAT) / latDistPerTile);
+
+        String[][] renderGrid = new String[lrY - ulY + 1][lrX - ulX + 1];
+        for (int i = 0; i <= lrY - ulY; i += 1) {
+            for (int j = 0; j <= lrX - ulX; j += 1) {
+                renderGrid[i][j] = "d" + depth + "_x" + (ulX + j) + "_y" + (ulY + i) + ".png";
+            }
+        }
+
+        double rasterUllon = Constants.ROOT_ULLON + ulX * lonDistPerTile;
+        double rasterUllat = Constants.ROOT_ULLAT - ulY * latDistPerTile;
+        double rasterLrlon = Constants.ROOT_ULLON + (lrX + 1) * lonDistPerTile;
+        double rasterLrlat = Constants.ROOT_ULLAT - (lrY + 1) * latDistPerTile;
+
+        results.put("raster_ul_lon", rasterUllon);
+        results.put("raster_ul_lat", rasterUllat);
+        results.put("raster_lr_lon", rasterLrlon);
+        results.put("raster_lr_lat", rasterLrlat);
+        results.put("render_grid", renderGrid);
+        results.put("depth", depth);
+        results.put("query_success", true);
+
         return results;
+    }
+
+    private int getImageDepth(double ullon, double lrlon, double width) {
+        double maxLonDPP = lonDPP(lrlon, ullon, width);
+        int depth = 0;
+        double lonDPP = (Constants.ROOT_LRLON - Constants.ROOT_ULLON) / Constants.TILE_SIZE;
+        while (lonDPP > maxLonDPP && depth < 7) {
+            depth += 1;
+            lonDPP /= 2;
+        }
+        return depth;
+    }
+
+    private double lonDPP(double lrlon, double ullon, double width) {
+        return (lrlon - ullon) / width;
     }
 
     @Override
