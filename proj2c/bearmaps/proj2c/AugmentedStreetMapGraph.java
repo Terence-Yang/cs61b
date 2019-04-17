@@ -18,13 +18,26 @@ import java.util.*;
 public class AugmentedStreetMapGraph extends StreetMapGraph {
     private List<Point> points;
     private Map<Point, Node> pointToNode;
+    private MyTrieSet trie;
+    private Map<String, List<Node>> nameToNodes;
 
     public AugmentedStreetMapGraph(String dbPath) {
         super(dbPath);
         List<Node> nodes = this.getNodes();
         points = new ArrayList<>();
         pointToNode = new HashMap<>();
+        trie = new MyTrieSet();
+        nameToNodes = new HashMap<>();
         for (Node node : nodes) {
+            if (node.name() != null) {
+                String cleanName = cleanString(node.name());
+                trie.add(cleanName);
+                if (!nameToNodes.containsKey(cleanName)) {
+                    nameToNodes.put(cleanName, new LinkedList<>());
+                }
+                nameToNodes.get(cleanName).add(node);
+            }
+
             if (neighbors(node.id()).size() > 0) {
                 Point p = new Point(node.lon(), node.lat());
                 points.add(p);
@@ -58,7 +71,13 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * cleaned <code>prefix</code>.
      */
     public List<String> getLocationsByPrefix(String prefix) {
-        return new LinkedList<>();
+        List<String> cleanNames = trie.keysWithPrefix(cleanString(prefix));
+        List<String> fullNames = new LinkedList<>();
+        for (String name: cleanNames) {
+            Node n = nameToNodes.get(name).get(0);
+            fullNames.add(n.name());
+        }
+        return fullNames;
     }
 
     /**
@@ -75,7 +94,19 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * "id" -> Number, The id of the node. <br>
      */
     public List<Map<String, Object>> getLocations(String locationName) {
-        return new LinkedList<>();
+        List<Map<String, Object>> locations = new LinkedList<>();
+        String cleanName = cleanString(locationName);
+        if (nameToNodes.containsKey(cleanName)) {
+            for (Node n: nameToNodes.get(cleanName)) {
+                Map<String, Object> locationInfo = new HashMap<>();
+                locationInfo.put("lon", n.lon());
+                locationInfo.put("lat", n.lat());
+                locationInfo.put("name", n.name());
+                locationInfo.put("id", n.id());
+                locations.add(locationInfo);
+            }
+        }
+        return locations;
     }
 
 
