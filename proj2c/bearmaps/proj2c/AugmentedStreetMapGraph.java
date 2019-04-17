@@ -74,8 +74,11 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
         List<String> cleanNames = trie.keysWithPrefix(cleanString(prefix));
         List<String> fullNames = new LinkedList<>();
         for (String name: cleanNames) {
-            Node n = nameToNodes.get(name).get(0);
-            fullNames.add(n.name());
+            for (Node n: nameToNodes.get(name)) {
+                if (!fullNames.contains(n.name())) {
+                    fullNames.add(n.name());
+                }
+            }
         }
         return fullNames;
     }
