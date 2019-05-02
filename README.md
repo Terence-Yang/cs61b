@@ -2,4 +2,4 @@
 
 UC Berkeley, Spring 2019
 
-https://sp19.datastructur.es/
+https://inst.eecs.berkeley.edu/~cs61b/sp19/
